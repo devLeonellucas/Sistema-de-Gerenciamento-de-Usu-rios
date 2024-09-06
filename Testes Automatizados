@@ -1,0 +1,54 @@
+import unittest
+
+from user_manager import UserManager  # Suponha que o sistema esteja no arquivo user_manager.py
+
+class TestUserManager(unittest.TestCase):
+    
+    def setUp(self):
+        """ Configuração inicial para os testes. """
+        self.user_manager = UserManager()
+
+    def test_add_user(self):
+        """ Testa a adição de um usuário. """
+        result = self.user_manager.add_user("Leonel")
+        self.assertTrue(result)
+        self.assertIn("Leonel", self.user_manager.users)
+
+    def test_add_existing_user(self):
+        """ Testa a tentativa de adicionar um usuário já existente. """
+        self.user_manager.add_user("Lucas")
+        result = self.user_manager.add_user("Lucas")
+        self.assertFalse(result)
+        self.assertEqual(self.user_manager.total_users(), 1)
+
+    def test_remove_user(self):
+        """ Testa a remoção de um usuário. """
+        self.user_manager.add_user("Ana")
+        result = self.user_manager.remove_user("Ana")
+        self.assertTrue(result)
+        self.assertNotIn("Ana", self.user_manager.users)
+
+    def test_remove_non_existent_user(self):
+        """ Testa a remoção de um usuário que não existe. """
+        result = self.user_manager.remove_user("Pedro")
+        self.assertFalse(result)
+
+    def test_find_user(self):
+        """ Testa a busca de um usuário existente. """
+        self.user_manager.add_user("Carlos")
+        result = self.user_manager.find_user("Carlos")
+        self.assertTrue(result)
+
+    def test_find_non_existent_user(self):
+        """ Testa a busca de um usuário que não existe. """
+        result = self.user_manager.find_user("Maria")
+        self.assertFalse(result)
+
+    def test_total_users(self):
+        """ Testa o total de usuários no sistema. """
+        self.user_manager.add_user("Rafael")
+        self.user_manager.add_user("Roberto")
+        self.assertEqual(self.user_manager.total_users(), 2)
+
+if __name__ == '__main__':
+    unittest.main()
